@@ -3,12 +3,11 @@ import pytest
 pytest.importorskip("tornado")  # isort:skip
 
 import mock
+import tornado
 from elasticapm.contrib.tornado import ApiElasticHandlerAPM
 from elasticapm.contrib.tornado import TornadoApm
 from tests.contrib.tornado import BaseTestClass
 from tests.contrib.tornado import BaseTestClassTornado
-
-
 
 
 class MockMatcher:

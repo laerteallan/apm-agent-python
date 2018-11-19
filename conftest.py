@@ -23,6 +23,12 @@ try:
 except ImportError:
     pass
 
+try:
+    from tests.contrib.tornado import tornado
+except ImportError:
+    pass
+
+
 where_am_i = dirname(abspath(__file__))
 
 BASE_TEMPLATE_DIR = join(where_am_i, "tests", "contrib", "django", "testapp", "templates")
