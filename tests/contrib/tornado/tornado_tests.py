@@ -17,17 +17,17 @@ class MockWillCardRouter:
     matcher = MockMatcher()
 
 
-def test_capture_exception(self):
+def test_capture_exception():
     application = mock.MagicMock()
     request = mock.MagicMock()
     client = mock.MagicMock()
     application().settings.get.return_value = client
     handler = ApiElasticHandlerAPM(application, request)
     handler.capture_exception()
-    self.assertTrue(application.called)
+    assert application.called
 
 
-def test_capture_message(self):
+def test_capture_message():
     application = mock.MagicMock()
     client = mock.MagicMock()
     application().settings.get.return_value = client
@@ -35,30 +35,30 @@ def test_capture_message(self):
     handler = ApiElasticHandlerAPM(application, request)
     message = "error"
     handler.capture_message(message)
-    self.assertTrue(application.called)
+    assert application.called
 
 
-def test_write_error(self):
+def test_write_error():
     application = mock.MagicMock()
     client = mock.MagicMock()
     application().settings.get.return_value = client
     request = mock.MagicMock()
     handler = ApiElasticHandlerAPM(application, request)
     handler.write_error(status_code=400)
-    self.assertTrue(application.called)
+    assert application.called
 
 
-def test_prepare(self):
+def test_prepare():
     application = mock.MagicMock()
     client = mock.MagicMock()
     application().settings.get.return_value = client
     request = mock.MagicMock()
     handler = ApiElasticHandlerAPM(application, request)
     handler.prepare()
-    self.assertTrue(application.called)
+    assert application.called
 
 
-def test_get_url(self):
+def test_get_url():
     application = mock.MagicMock()
     request = mock.MagicMock()
     handler = ApiElasticHandlerAPM(application, request)
@@ -68,7 +68,7 @@ def test_get_url(self):
     mock_will.target = handler.__class__
     application.wildcard_router.rules = [mock_will]
     url = handler.get_url()
-    self.assertEqual(url, 'test/:operator/extref/:extref')
+    assert url == 'test/:operator/extref/:extref'
 
 
 @mock.patch("elasticapm.contrib.tornado.elasticapm")
@@ -91,8 +91,6 @@ def test_app_tornado_invalid():
         TornadoApm(app)
 
 
-
-
 @mock.patch("elasticapm.base.Client.capture_message")
 def test_capture_message(mock_client):
     app = mock.MagicMock()
@@ -101,13 +99,13 @@ def test_capture_message(mock_client):
     apm_tornado.capture_message(message_error)
     assert mock_client.called
 
+
 @mock.patch("elasticapm.base.Client.capture_exception")
 def test_capture_exception(mock_client):
     app = mock.MagicMock()
     apm_tornado = TornadoApm(app)
     apm_tornado.capture_exception()
     assert mock_client.called
-
 
 # class TestApiMcafee(BaseTestClassTornado):
 #
