@@ -78,6 +78,7 @@ tests_require = [
     "celery",
     "django-celery",
     "Flask>=0.8",
+    "tornado>=4.5",
     "logbook",
     "mock",
     "pep8",
