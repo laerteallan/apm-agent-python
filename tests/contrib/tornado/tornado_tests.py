@@ -3,11 +3,8 @@ import pytest
 pytest.importorskip("tornado")  # isort:skip
 
 import mock
-import tornado
 from elasticapm.contrib.tornado import ApiElasticHandlerAPM
 from elasticapm.contrib.tornado import TornadoApm
-from tests.contrib.tornado import BaseTestClass
-from tests.contrib.tornado import BaseTestClassTornado
 
 
 class MockMatcher:
@@ -20,97 +17,99 @@ class MockWillCardRouter:
     matcher = MockMatcher()
 
 
-class TestApiElasticHandlerAPM(BaseTestClass):
-
-    def test_capture_exception(self):
-        application = mock.MagicMock()
-        request = mock.MagicMock()
-        client = mock.MagicMock()
-        application().settings.get.return_value = client
-        handler = ApiElasticHandlerAPM(application, request)
-        handler.capture_exception()
-        self.assertTrue(application.called)
-
-    def test_capture_message(self):
-        application = mock.MagicMock()
-        client = mock.MagicMock()
-        application().settings.get.return_value = client
-        request = mock.MagicMock()
-        handler = ApiElasticHandlerAPM(application, request)
-        message = "error"
-        handler.capture_message(message)
-        self.assertTrue(application.called)
-
-    def test_write_error(self):
-        application = mock.MagicMock()
-        client = mock.MagicMock()
-        application().settings.get.return_value = client
-        request = mock.MagicMock()
-        handler = ApiElasticHandlerAPM(application, request)
-        handler.write_error(status_code=400)
-        self.assertTrue(application.called)
-
-    def test_prepare(self):
-        application = mock.MagicMock()
-        client = mock.MagicMock()
-        application().settings.get.return_value = client
-        request = mock.MagicMock()
-        handler = ApiElasticHandlerAPM(application, request)
-        handler.prepare()
-        self.assertTrue(application.called)
-
-    def test_get_url(self):
-        application = mock.MagicMock()
-        request = mock.MagicMock()
-        handler = ApiElasticHandlerAPM(application, request)
-        mock_will = MockWillCardRouter()
-        mock_will.matcher.regex.groupindex.values.return_value = [1, 2]
-        mock_will.matcher.regex.groupindex.items.return_value = [('operator', 1), ('extref', 2)]
-        mock_will.target = handler.__class__
-        application.wildcard_router.rules = [mock_will]
-        url = handler.get_url()
-        self.assertEqual(url, 'test/:operator/extref/:extref')
-
-    @mock.patch("elasticapm.contrib.tornado.elasticapm")
-    def test_on_finish(self, mock_elastic):
-        application = mock.MagicMock()
-        client = mock.MagicMock()
-        application().settings.get.return_value = client
-        request = mock.MagicMock()
-        handler = ApiElasticHandlerAPM(application, request)
-        handler.get_url = mock.Mock()
-        handler.on_finish()
-        self.assertTrue(application.called)
-        self.assertTrue(handler.get_url.called)
-        self.assertTrue(mock_elastic.set_context.called)
+def test_capture_exception(self):
+    application = mock.MagicMock()
+    request = mock.MagicMock()
+    client = mock.MagicMock()
+    application().settings.get.return_value = client
+    handler = ApiElasticHandlerAPM(application, request)
+    handler.capture_exception()
+    self.assertTrue(application.called)
 
 
-class TestTornadoAPM(BaseTestClass):
-
-    def test_app_tornado_invalid(self):
-        with self.assertRaises(Exception):
-            app = None
-            TornadoApm(app)
-
-    @mock.patch("elasticapm.base.Client.capture_message")
-    def test_capture_message(self, mock_client):
-        app = mock.MagicMock()
-        apm_tornado = TornadoApm(app)
-        message_error = "Error"
-        apm_tornado.capture_message(message_error)
-        self.assertTrue(mock_client.called)
-
-    @mock.patch("elasticapm.base.Client.capture_exception")
-    def test_capture_exception(self, mock_client):
-        app = mock.MagicMock()
-        apm_tornado = TornadoApm(app)
-        apm_tornado.capture_exception()
-        self.assertTrue(mock_client.called)
+def test_capture_message(self):
+    application = mock.MagicMock()
+    client = mock.MagicMock()
+    application().settings.get.return_value = client
+    request = mock.MagicMock()
+    handler = ApiElasticHandlerAPM(application, request)
+    message = "error"
+    handler.capture_message(message)
+    self.assertTrue(application.called)
 
 
-class TestApiMcafee(BaseTestClassTornado):
+def test_write_error(self):
+    application = mock.MagicMock()
+    client = mock.MagicMock()
+    application().settings.get.return_value = client
+    request = mock.MagicMock()
+    handler = ApiElasticHandlerAPM(application, request)
+    handler.write_error(status_code=400)
+    self.assertTrue(application.called)
 
-    def test_error_handler(self):
-        url = "/error"
-        response = self.fetch(url, method='GET')
-        print(response)
+
+def test_prepare(self):
+    application = mock.MagicMock()
+    client = mock.MagicMock()
+    application().settings.get.return_value = client
+    request = mock.MagicMock()
+    handler = ApiElasticHandlerAPM(application, request)
+    handler.prepare()
+    self.assertTrue(application.called)
+
+
+def test_get_url(self):
+    application = mock.MagicMock()
+    request = mock.MagicMock()
+    handler = ApiElasticHandlerAPM(application, request)
+    mock_will = MockWillCardRouter()
+    mock_will.matcher.regex.groupindex.values.return_value = [1, 2]
+    mock_will.matcher.regex.groupindex.items.return_value = [('operator', 1), ('extref', 2)]
+    mock_will.target = handler.__class__
+    application.wildcard_router.rules = [mock_will]
+    url = handler.get_url()
+    self.assertEqual(url, 'test/:operator/extref/:extref')
+
+
+@mock.patch("elasticapm.contrib.tornado.elasticapm")
+def test_on_finish(mock_elastic):
+    application = mock.MagicMock()
+    client = mock.MagicMock()
+    application().settings.get.return_value = client
+    request = mock.MagicMock()
+    handler = ApiElasticHandlerAPM(application, request)
+    handler.get_url = mock.Mock()
+    handler.on_finish()
+    assert application.called
+    assert handler.get_url.called
+    assert mock_elastic.set_context.called
+
+
+def test_app_tornado_invalid():
+    with pytest.raises(Exception):
+        app = None
+        TornadoApm(app)
+
+
+@mock.patch("elasticapm.base.Client.capture_message")
+def test_capture_message(mock_client):
+    app = mock.MagicMock()
+    apm_tornado = TornadoApm(app)
+    message_error = "Error"
+    apm_tornado.capture_message(message_error)
+    assert mock_client.called
+
+@mock.patch("elasticapm.base.Client.capture_exception")
+def test_capture_exception(mock_client):
+    app = mock.MagicMock()
+    apm_tornado = TornadoApm(app)
+    apm_tornado.capture_exception()
+    assert mock_client.called
+
+
+# class TestApiMcafee(BaseTestClassTornado):
+#
+#     def test_error_handler(self):
+#         url = "/error"
+#         response = self.fetch(url, method='GET')
+#         print(response)
