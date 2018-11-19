@@ -9,10 +9,10 @@ flake8:
 
 test:
 	if [[ "$$PYTHON_VERSION" =~ ^(3.5|3.6|nightly|pypy3)$$ ]] ; then \
-	echo "laerte"
-	echo $(PYTEST_ARGS)
-	echo %$PYTEST_MARKER)
-	echo $(PYTEST_JUNIT)
+	echo "laerte" \
+	echo $(PYTEST_ARGS) \
+	echo $PYTEST_MARKER)\
+	echo $(PYTEST_JUNIT)\
 	py.test -v $(PYTEST_ARGS) $(PYTEST_MARKER) $(PYTEST_JUNIT); \
 	else py.test -v $(PYTEST_ARGS) $(PYTEST_MARKER) $(PYTEST_JUNIT) --ignore=tests/asyncio; fi
 
