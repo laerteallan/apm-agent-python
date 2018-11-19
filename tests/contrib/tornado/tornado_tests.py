@@ -91,6 +91,8 @@ def test_app_tornado_invalid():
         TornadoApm(app)
 
 
+
+
 @mock.patch("elasticapm.base.Client.capture_message")
 def test_capture_message(mock_client):
     app = mock.MagicMock()
