@@ -1,2 +1,3 @@
 https://github.com/pallets/flask/archive/master.zip#egg=flask==100
+tornado
 -r requirements-base.txt
