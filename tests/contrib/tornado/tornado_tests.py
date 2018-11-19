@@ -1,4 +1,8 @@
+import pytest
+
 from tests.contrib.tornado import BaseTestClassTornado
+
+pytest.importorskip("tornado")  # isort:skip
 
 
 class TestApiMcafee(BaseTestClassTornado):

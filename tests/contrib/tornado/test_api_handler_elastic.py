@@ -1,7 +1,10 @@
 import mock
+import pytest  # isort:skip
 
 from elasticapm.contrib.tornado import ApiElasticHandlerAPM
 from tests.contrib.tornado import BaseTestClass
+
+pytest.importorskip("tornado")  # isort:skip
 
 
 class MockMatcher:
