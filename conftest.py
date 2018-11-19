@@ -24,7 +24,7 @@ except ImportError:
     pass
 
 try:
-    from tests.contrib.tornado import tornado
+    from tests.contrib.tornado.tornado_tests import tornado
 except ImportError:
     pass
 
