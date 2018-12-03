@@ -1,6 +1,8 @@
 from elasticapm.instrumentation.packages.dbapi2 import DbApi2Instrumentation, extract_signature
 from elasticapm.traces import capture_span
 from sqlalchemy.sql.selectable import Select
+from sqlalchemy.sql.elements import TextClause
+from sqlalchemy.sql.dml import Update, Insert
 
 
 class SqlalchemyInstrumentation(DbApi2Instrumentation):
@@ -20,7 +22,7 @@ class SqlalchemyInstrumentation(DbApi2Instrumentation):
     def call(self, module, method, wrapped, instance, args, kwargs):
         if args:
             first_arg = args[0]
-            if isinstance(first_arg, Select):
+            if isinstance(first_arg, (Select, TextClause, Update, Insert)):
                 query = str(first_arg)
                 signature = extract_signature(query)
                 data = self.__extra_data(instance, query)
